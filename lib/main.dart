@@ -1,4 +1,5 @@
 import 'package:ecommerce/cubit/category_navigation_cubit.dart';
+import 'package:ecommerce/cubit/favorite_cubit.dart';
 import 'package:ecommerce/cubit/forget_password_cubit.dart';
 import 'package:ecommerce/cubit/home_cubit.dart';
 import 'package:ecommerce/cubit/location_cubit.dart';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>OtpCubit()),
           BlocProvider(create: (context)=>ResetPasswordCubit()),
           BlocProvider(create: (context) => ProductCubit()),
-          BlocProvider(create: (context)=>CategoryCubit())
+          BlocProvider(create: (context)=>CategoryCubit()),
+          BlocProvider(create: (context)=>FavoriteProductsCubit()),
 
         ],
         child:MaterialApp(
