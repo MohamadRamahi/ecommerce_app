@@ -1,6 +1,7 @@
 import 'package:ecommerce/cubit/category_navigation_cubit.dart';
 import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/widget/category_bar_widget.dart';
+import 'package:ecommerce/view/widget/filter_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:ecommerce/view/widget/product_widget.dart';
 import 'package:ecommerce/view/widget/search_widget.dart';
@@ -44,7 +45,18 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: responsiveHeight(context, 16)),
 
                 /// 🔍 Search Widget
-                const SearchWidget(),
+                Row(
+                  children: [
+                    Expanded(child: SearchWidget()), // <-- takes remaining space
+                    SizedBox(width: responsiveWidth(context, 8)),
+                    FilterWidget(
+                      onApplyFilter: (filters) {
+
+                      },
+                    )
+                  ],
+                ),
+
 
                 SizedBox(height: responsiveHeight(context, 16)),
 

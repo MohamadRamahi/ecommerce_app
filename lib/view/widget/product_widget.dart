@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ProductCard extends StatelessWidget {
   final ProductModel product;
 
+
   const ProductCard({
     super.key,
     required this.product,

@@ -1,3 +1,4 @@
+import 'package:ecommerce/cubit/cart_cubit.dart';
 import 'package:ecommerce/cubit/category_navigation_cubit.dart';
 import 'package:ecommerce/cubit/favorite_cubit.dart';
 import 'package:ecommerce/cubit/forget_password_cubit.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => ProductCubit()),
           BlocProvider(create: (context)=>CategoryCubit()),
           BlocProvider(create: (context)=>FavoriteProductsCubit()),
+          BlocProvider(create: (context)=>CartCubit()),
 
         ],
         child:MaterialApp(
