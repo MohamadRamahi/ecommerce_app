@@ -4,19 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CartItem {
   final ProductModel product;
   final int quantity;
+  final String size; // 👈 new field
 
   CartItem({
     required this.product,
     required this.quantity,
+    required this.size,
   });
 
   CartItem copyWith({
     ProductModel? product,
     int? quantity,
+    String? size,
   }) {
     return CartItem(
       product: product ?? this.product,
       quantity: quantity ?? this.quantity,
+      size: size ?? this.size,
     );
   }
 
@@ -25,10 +29,11 @@ class CartItem {
       identical(this, other) ||
           other is CartItem &&
               runtimeType == other.runtimeType &&
-              product.name == other.product.name;
+              product.name == other.product.name &&
+              size == other.size; // 👈 compare by size too
 
   @override
-  int get hashCode => product.name.hashCode;
+  int get hashCode => product.name.hashCode ^ size.hashCode;
 }
 
 class CartCubit extends Cubit<List<CartItem>> {
@@ -37,9 +42,10 @@ class CartCubit extends Cubit<List<CartItem>> {
   Future<void> addToCart({
     required ProductModel product,
     required int quantity,
+    required String size, // 👈 new parameter
   }) async {
     final index = state.indexWhere(
-          (item) => item.product.name == product.name,
+          (item) => item.product.name == product.name && item.size == size,
     );
 
     if (index != -1) {
@@ -52,10 +58,11 @@ class CartCubit extends Cubit<List<CartItem>> {
     } else {
       emit([
         ...state,
-        CartItem(product: product, quantity: quantity),
+        CartItem(product: product, quantity: quantity, size: size),
       ]);
     }
   }
+
 
   void removeFromCart(CartItem itemToRemove) {
     emit(state.where((item) => item != itemToRemove).toList());
@@ -66,16 +73,16 @@ class CartCubit extends Cubit<List<CartItem>> {
   }
 
   void updateQuantity(CartItem item, int newQuantity) {
-    if (newQuantity < 1) return;
-
-    final updatedItem = item.copyWith(quantity: newQuantity);
-    final updatedCart = state.map((i) {
-      return (i.product.name == item.product.name)
-          ? updatedItem
-          : i;
-    }).toList();
-    emit(updatedCart);
+    if (newQuantity > 0) {
+      final updatedItems = [...state];
+      final index = updatedItems.indexOf(item);
+      if (index != -1) {
+        updatedItems[index] = item.copyWith(quantity: newQuantity);
+        emit(updatedItems);
+      }
+    }
   }
+
 
   double get subTotal {
     return state.fold(

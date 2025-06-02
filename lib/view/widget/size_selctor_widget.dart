@@ -1,70 +1,46 @@
-import 'package:ecommerce/responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce/responsive.dart';
 
-class SizeSelector extends StatefulWidget {
-  const SizeSelector({Key? key}) : super(key: key);
+class SizeSelector extends StatelessWidget {
+  final String selectedSize;
+  final ValueChanged<String> onSizeSelected;
 
-  @override
-  _SizeSelectorState createState() => _SizeSelectorState();
-}
-
-class _SizeSelectorState extends State<SizeSelector> {
-  String selectedSize = 'L';
-
-  final List<String> sizes = ['S', 'M', 'L'];
+  const SizeSelector({
+    super.key,
+    required this.selectedSize,
+    required this.onSizeSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Choose size',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-           
-          ),
-        ),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: sizes.map((size) {
-            final bool isSelected = selectedSize == size;
-            return Padding(
-              padding: const EdgeInsets.only(right: 12.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    selectedSize = size;
-                  });
-                },
-                child: Container(
-                  width: responsiveWidth(context, 50),
-                  height: responsiveHeight(context, 50),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border.all(
-                      color: isSelected ? Colors.black : Colors.grey.shade400,
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    size,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: isSelected ? Colors.black : Colors.grey.shade600,
-                    ),
-                  ),
-                ),
+    final sizes = ['S', 'M', 'L'];
+
+    return Row(
+      children: sizes.map((size) {
+        final isSelected = size == selectedSize;
+        return GestureDetector(
+          onTap: () => onSizeSelected(size),
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: responsiveWidth(context, 8)),
+            padding: EdgeInsets.symmetric(
+              horizontal: responsiveWidth(context, 16),
+              vertical: responsiveHeight(context, 10),
+            ),
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.black : Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              size,
+              style: TextStyle(
+                color: isSelected ? Colors.white : Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: responsiveWidth(context, 16),
               ),
-            );
-          }).toList(),
-        ),
-      ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }

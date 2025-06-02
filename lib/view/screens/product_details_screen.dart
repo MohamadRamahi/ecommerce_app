@@ -18,6 +18,7 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1;
+  String selectedSize = 'L';
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +152,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),),
                     SizedBox(height: responsiveHeight(context, 12),),
 
-                    SizeSelector(),
+                    SizeSelector(
+                      selectedSize: selectedSize,
+                      onSizeSelected: (size) {
+                        setState(() {
+                          selectedSize = size;
+                        });
+                      },
+                    ),
 
                     SizedBox(height: responsiveHeight(context, 12),),
                     Divider(
@@ -187,6 +195,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               context.read<CartCubit>().addToCart(
                               product: product,
                                 quantity: quantity,
+                                size: selectedSize,
                               );
                             },
                               style: ElevatedButton.styleFrom(

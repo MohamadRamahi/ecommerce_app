@@ -9,6 +9,7 @@ import 'package:ecommerce/cubit/otp_cubit.dart';
 import 'package:ecommerce/cubit/product_cubit.dart';
 import 'package:ecommerce/cubit/reset_password_cubit.dart';
 import 'package:ecommerce/cubit/signup_cubit.dart';
+import 'package:ecommerce/cubit/size_cubit.dart';
 import 'package:ecommerce/location_permission.dart';
 import 'package:ecommerce/main_screen.dart';
 import 'package:ecommerce/model/location_repository.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>CategoryCubit()),
           BlocProvider(create: (context)=>FavoriteProductsCubit()),
           BlocProvider(create: (context)=>CartCubit()),
+          BlocProvider(create: (context)=>SizeCubit()),
 
         ],
         child:MaterialApp(
