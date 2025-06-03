@@ -17,17 +17,16 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: responsiveWidth(context, 24),
-            vertical: responsiveHeight(context, 16),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// 🧭 Header Row
-                Row(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// 🧭 Header Row
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: responsiveWidth(context, 24),
+                    vertical: responsiveHeight(context, 16)),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -41,11 +40,16 @@ class HomeScreen extends StatelessWidget {
                     NotificationIcon(),
                   ],
                 ),
+              ),
 
-                SizedBox(height: responsiveHeight(context, 16)),
+              SizedBox(height: responsiveHeight(context, 16)),
 
-                /// 🔍 Search Widget
-                Row(
+              /// 🔍 Search Widget
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: responsiveWidth(context, 24),
+                    ),
+                child: Row(
                   children: [
                     Expanded(child: SearchWidget()), // <-- takes remaining space
                     SizedBox(width: responsiveWidth(context, 8)),
@@ -56,17 +60,26 @@ class HomeScreen extends StatelessWidget {
                     )
                   ],
                 ),
+              ),
 
 
-                SizedBox(height: responsiveHeight(context, 16)),
+              SizedBox(height: responsiveHeight(context, 16)),
 
-                /// 📂 Category Bar
-                CategoryBarWidget(),
+              /// 📂 Category Bar
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: responsiveWidth(context, 24),),
+                child: CategoryBarWidget(),
+              ),
 
-                SizedBox(height: responsiveHeight(context, 24)),
+              SizedBox(height: responsiveHeight(context, 24)),
 
-                /// 🛍️ Filtered Products List
-                BlocBuilder<CategoryCubit, CategoryState>(
+              /// 🛍️ Filtered Products List
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: responsiveWidth(context, 24),
+                vertical: responsiveHeight(context, 16)),
+                child: BlocBuilder<CategoryCubit, CategoryState>(
                   builder: (context, state) {
                     final products = state.filteredProducts;
                     if (products.isEmpty) {
@@ -82,6 +95,7 @@ class HomeScreen extends StatelessWidget {
                     }
 
                     return GridView.builder(
+
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: products.length,
@@ -96,11 +110,13 @@ class HomeScreen extends StatelessWidget {
                         return ProductCard(product: product);
                       },
                     );
+
                   },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+
         ),
       ),
     );

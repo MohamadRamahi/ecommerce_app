@@ -22,8 +22,8 @@ class QuantitySelector extends StatelessWidget {
         GestureDetector(
           onTap: () => onDecrease(quantity - 1),
           child: Container(
-            height: responsiveHeight(context, 24),
-            width: responsiveWidth(context, 24),
+            height: responsiveHeight(context, 28),
+            width: responsiveWidth(context, 28),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
@@ -59,8 +59,8 @@ class QuantitySelector extends StatelessWidget {
         GestureDetector(
           onTap: () => onIncrease(quantity + 1),
           child: Container(
-            height: responsiveHeight(context, 24),
-            width: responsiveWidth(context, 24),
+            height: responsiveHeight(context, 28),
+            width: responsiveWidth(context, 28),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
               border: Border.all(

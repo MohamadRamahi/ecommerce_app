@@ -209,7 +209,7 @@ Widget _buildLocationPermissionPage(BuildContext context) {
                   foregroundColor: Colors.white,
                   minimumSize: Size(307, 48),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text(
@@ -238,7 +238,7 @@ Widget _buildLocationPermissionPage(BuildContext context) {
                   foregroundColor: Colors.white,
                   minimumSize: Size(307, 48),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),

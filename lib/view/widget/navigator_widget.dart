@@ -72,7 +72,7 @@ class _NavigationbarWidgetState extends State<NavigationbarWidget> {
         borderRadius: BorderRadius.circular(10.0),
         colorBehindNavBar: Colors.white,
       ),
-      navBarStyle: NavBarStyle.style6,
+      navBarStyle: NavBarStyle.style9,
     );
   }
 }

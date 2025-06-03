@@ -1,6 +1,7 @@
 import 'package:ecommerce/const.dart';
 import 'package:ecommerce/cubit/cart_cubit.dart';
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/checkout_screen.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:ecommerce/view/widget/selector_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class CartScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        Icons.favorite_border_rounded,
+                        Icons.shopping_cart_outlined,
                         size: responsiveWidth(context, 56),
                         color: Colors.grey,
                       ),
@@ -121,14 +122,15 @@ class CartScreen extends StatelessWidget {
                                           child: Text(
                                             item.product.name,
                                             style: TextStyle(
-                                              fontSize: responsiveWidth(context, 15),
+                                              fontSize: responsiveWidth(context, 18),
                                               fontWeight: FontWeight.bold,
                                             ),
                                             overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                         IconButton(
-                                          icon: Icon(Icons.delete, color: Colors.red, size: responsiveWidth(context, 20)),
+                                          icon: Icon(Icons.delete, color: Colors.red,
+                                              size: responsiveWidth(context, 24)),
                                           onPressed: () {
                                             context.read<CartCubit>().removeFromCart(item);
                                           },
@@ -138,7 +140,7 @@ class CartScreen extends StatelessWidget {
                                     Text(
                                       'Size: ${item.size}',
                                       style: TextStyle(
-                                        fontSize: responsiveWidth(context, 13),
+                                        fontSize: responsiveWidth(context, 14),
                                         color: Colors.grey,
                                       ),
                                     ),
@@ -229,8 +231,8 @@ class CartScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Handle checkout
-                          },
+                          Navigator.push(context,
+                          MaterialPageRoute(builder: (context)=>CheckoutScreen()));                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: KbuttonColor,
                             padding: EdgeInsets.symmetric(vertical: responsiveHeight(context, 14)),
