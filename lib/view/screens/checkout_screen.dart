@@ -1,5 +1,9 @@
 import 'package:ecommerce/cubit/cart_cubit.dart';
+import 'package:ecommerce/cubit/location_cubit.dart';
+import 'package:ecommerce/model/saved_address.dart';
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/address_screen.dart';
+import 'package:ecommerce/view/screens/track_order_screen.dart';
 import 'package:ecommerce/view/widget/location_title_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Create an enum for payment methods
 enum PaymentMethod { card, cash, pay }
+
 
 class CheckoutScreen extends StatefulWidget {
   final LatLng? userLocation;
@@ -32,7 +37,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Future<void> _convertCoordinatesToAddress(LatLng? location) async {
     if (location != null) {
       try {
-        List<Placemark> placemarks = await placemarkFromCoordinates(
+        final placemarks = await placemarkFromCoordinates(
             location.latitude, location.longitude);
         if (placemarks.isNotEmpty) {
           final placemark = placemarks.first;
@@ -82,7 +87,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         color: Colors.black87,
                       ),
                     ),
-                    NotificationIcon(),
+                     NotificationIcon(),
                   ],
                 ),
                 SizedBox(height: responsiveHeight(context, 16)),
@@ -100,8 +105,23 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        // Navigate to address change screen here
+                      onPressed: () async {
+                        final savedAddress =
+                        await Navigator.push<SavedAddress>(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddressScreen()),
+                        );
+
+                        if (savedAddress != null) {
+                          setState(() {
+                            selectedAddressTitle = savedAddress.address;
+                          });
+
+                          final newLocation = LatLng(
+                              savedAddress.latitude, savedAddress.longitude);
+                          context.read<LocationCubit>().saveLocation(newLocation);
+                        }
                       },
                       child: const Text(
                         'Change',
@@ -115,11 +135,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   children: [
                     const Icon(Icons.location_on_outlined, color: Colors.grey),
                     SizedBox(width: responsiveWidth(context, 10)),
-                        LocationTitleWidget (),
-
+                    Expanded(child: LocationTitleWidget()),
                   ],
                 ),
                 const Divider(color: Color(0xffE6E6E6)),
+                // ... باقي الكود لم يتغير ...
+
                 SizedBox(height: responsiveHeight(context, 20)),
 
                 // Payment method selection
@@ -302,26 +323,88 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
 
                 SizedBox(
-                height: responsiveHeight(context, 54),
+                  height: responsiveHeight(context, 54),
                 ),
 
-                SizedBox(
-                  width: double.infinity,
-                  height: responsiveHeight(context, 54),
-                  child: ElevatedButton(
-                    onPressed: () {
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: const Text(
-                      "Place Order",
-                      style: TextStyle(color: Colors.white),
-                    ),
+      SizedBox(
+        width: double.infinity,
+        height: responsiveHeight(context, 54),
+        child: ElevatedButton(
+          onPressed: () {
+            showDialog(context: (context),
+                builder: (context)=>AlertDialog(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
+                  title: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.check_circle,
+                          color: Colors.green,
+                          size: 60
+                      ),
+                      SizedBox(height: responsiveHeight(context, 8),),
+
+                      Text(
+                        'Congratulations!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: responsiveHeight(context, 8),),
+                      Text(
+                        'Your order has been placed.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    Center(
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: responsiveHeight(context, 54),
+                        child: ElevatedButton(
+                            onPressed: (){
+                              Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context)=>TrackOrderScreen(),
+                                ),
+
+                              );
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                            child: Text('Track your order',
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),)),
+                      ),
+                    )
+                  ],
                 )
+            );
+            /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context)=>AddressScreen()));*/
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.black,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10)),
+          ),
+          child: const Text(
+            "Place Order",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      )
+
               ],
             ),
           ),

@@ -1,13 +1,9 @@
-
-
 import 'package:ecommerce/model/user_location.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../model/location_repository.dart';
 
-
-// حالات الـ Cubit
 abstract class LocationState {}
 
 class LocationInitial extends LocationState {}
@@ -26,30 +22,23 @@ class LocationCubit extends Cubit<LocationState> {
 
   LocationCubit(this.locationRepository) : super(LocationInitial());
 
-  /// جلب الموقع الحالي وتخزينه
   Future<void> getCurrentLocation() async {
     emit(LocationLoading());
     try {
-      UserLocation? location = await locationRepository.getUserLocation();
+      final location = await locationRepository.getUserLocation();
       if (location != null) {
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setDouble('latitude', location.latitude);
-        prefs.setDouble('longitude', location.longitude);
+        await _saveLocation(location.latitude, location.longitude);
         emit(LocationLoaded(location));
       } else {
         emit(LocationError());
       }
-    } catch (e) {
+    } catch (_) {
       emit(LocationError());
     }
   }
 
-  /// واجهة مختصرة تستخدم في الواجهة
-  Future<void> fetchUserLocation() async {
-    await getCurrentLocation();
-  }
+  Future<void> fetchUserLocation() async => await getCurrentLocation();
 
-  /// تحميل آخر موقع محفوظ
   Future<void> loadLastSavedLocation() async {
     final prefs = await SharedPreferences.getInstance();
     final lat = prefs.getDouble('latitude');
@@ -60,5 +49,17 @@ class LocationCubit extends Cubit<LocationState> {
     } else {
       emit(LocationError());
     }
+  }
+
+  Future<void> saveLocation(LatLng newLocation) async {
+    await _saveLocation(newLocation.latitude, newLocation.longitude);
+    emit(LocationLoaded(UserLocation(
+        latitude: newLocation.latitude, longitude: newLocation.longitude)));
+  }
+
+  Future<void> _saveLocation(double latitude, double longitude) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('latitude', latitude);
+    await prefs.setDouble('longitude', longitude);
   }
 }
