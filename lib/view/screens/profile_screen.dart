@@ -118,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
                                content: const Text('Are you sure you want to log out?'),
                                actions: [
                                  TextButton(
-                                   onPressed: () => Navigator.pop(context, false),
+                                   onPressed: () => Navigator.pop(context, true),
                                    child: const Text('Logout',
                                    style: TextStyle(
                                      color: Colors.red
@@ -126,7 +126,7 @@ class ProfileScreen extends StatelessWidget {
                                    ),
                                  ),
                                  TextButton(
-                                   onPressed: () => Navigator.pop(context, true),
+                                   onPressed: () => Navigator.pop(context, false),
                                    child: const Text(
                                      'Cancel',
                                      style: TextStyle(color: Colors.black),

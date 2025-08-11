@@ -8,7 +8,7 @@ final List<ProductModel> allProducts = [
     description: 'navy blue',
     image: 'assets/images/haevy_blue.png',
     price: 25.0,
-    rating: 4.6,
+    rating: 3,
     category: 'T-Shirt',
   ),
   ProductModel(
