@@ -4,16 +4,19 @@ import 'package:ecommerce/cubit/favorite_cubit.dart';
 import 'package:ecommerce/cubit/forget_password_cubit.dart';
 import 'package:ecommerce/cubit/location_cubit.dart';
 import 'package:ecommerce/cubit/login_cubit.dart';
+import 'package:ecommerce/cubit/notification_cubit.dart';
 import 'package:ecommerce/cubit/onbording_cubit.dart';
 import 'package:ecommerce/cubit/otp_cubit.dart';
 import 'package:ecommerce/cubit/product_cubit.dart';
 import 'package:ecommerce/cubit/reset_password_cubit.dart';
 import 'package:ecommerce/cubit/signup_cubit.dart';
 import 'package:ecommerce/cubit/size_cubit.dart';
+import 'package:ecommerce/firebase_notification.dart';
 import 'package:ecommerce/location_permission.dart';
 import 'package:ecommerce/main_screen.dart';
 import 'package:ecommerce/model/location_repository.dart';
 import 'package:ecommerce/view/screens/login_screen.dart';
+import 'package:ecommerce/view/screens/notification_screen.dart';
 import 'package:ecommerce/view/screens/onbording_screen.dart';
 import 'package:ecommerce/view/screens/signup_screen.dart';
 import 'package:ecommerce/view/screens/splash_screen.dart';
@@ -23,14 +26,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseNotification().initNotification();
   runApp(MyApp());
 }
-
+final GlobalKey<NavigatorState> navigatorKey =GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -52,10 +56,12 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>FavoriteProductsCubit()),
           BlocProvider(create: (context)=>CartCubit()),
           BlocProvider(create: (context)=>SizeCubit()),
+          BlocProvider(create: (context)=>NotificationCubit())
 
         ],
         child:MaterialApp(
           debugShowCheckedModeBanner: false,
+          navigatorKey: navigatorKey,
           // home: LaunchDecider(), // 👈 This is important
           initialRoute: '/',
           routes: {
@@ -66,6 +72,7 @@ class MyApp extends StatelessWidget {
             '/login': (context) => LoginScreen(),
             '/home': (context) => MainScreen(),
             // '/favorites': (context) => FavoritesScreen(), // ✅ أضف هذا السطر
+            '/notification': (context) => NotificationScreen(),
 
 
           },
