@@ -1,4 +1,5 @@
 import 'package:ecommerce/cubit/category_navigation_cubit.dart';
+import 'package:ecommerce/model/all_product.dart'; // مفترض يحتوي allProducts
 import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/widget/category_bar_widget.dart';
 import 'package:ecommerce/view/widget/filter_widget.dart';
@@ -47,11 +48,11 @@ class HomeScreen extends StatelessWidget {
               /// 🔍 Search Widget
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: responsiveWidth(context, 24),
-                    ),
+                  horizontal: responsiveWidth(context, 24),
+                ),
                 child: Row(
                   children: [
-                    Expanded(child: SearchWidget()), // <-- takes remaining space
+                    Expanded(child: SearchWidget(allProducts: allProducts)),  // هنا
                     SizedBox(width: responsiveWidth(context, 8)),
                     FilterWidget(
                       onApplyFilter: (filters) {
@@ -62,13 +63,12 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-
               SizedBox(height: responsiveHeight(context, 16)),
 
               /// 📂 Category Bar
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: responsiveWidth(context, 24),),
+                  horizontal: responsiveWidth(context, 24),),
                 child: CategoryBarWidget(),
               ),
 
@@ -78,7 +78,7 @@ class HomeScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: responsiveWidth(context, 24),
-                vertical: responsiveHeight(context, 16)),
+                    vertical: responsiveHeight(context, 16)),
                 child: BlocBuilder<CategoryCubit, CategoryState>(
                   builder: (context, state) {
                     final products = state.filteredProducts;
@@ -95,7 +95,6 @@ class HomeScreen extends StatelessWidget {
                     }
 
                     return GridView.builder(
-
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: products.length,
@@ -122,4 +121,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
