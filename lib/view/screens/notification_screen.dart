@@ -1,4 +1,5 @@
 import 'package:ecommerce/cubit/notification_cubit.dart';
+import 'package:ecommerce/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,19 +26,22 @@ class NotificationScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       const SizedBox(height: 16),
-                      Stack(
-                        children: [
-                          const BackButton(),
-                          const Center(
-                            child: Text(
-                              "Notifications",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Stack(
+                          children: [
+                            const BackButton(),
+                            const Center(
+                              child: Text(
+                                "Notifications",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 16),
                       const TabBar(
@@ -78,10 +82,28 @@ class NotificationScreen extends StatelessWidget {
 
   Widget _buildNotificationList(BuildContext context, List<NotificationItem> items, {bool showEmptyMessage = false}) {
     if (items.isEmpty && showEmptyMessage) {
-      return const Center(
-        child: Text(
-          "No messages",
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+      return  Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.notifications,color: Color(0xffB3B3B3),
+              size: responsiveWidth(context, 64),),
+            SizedBox(height: responsiveHeight(context, 24),),
+            Text(
+              "You haven’t gotten any\n notifications yet!",
+              textAlign: TextAlign.center, // نص مركزي
+
+              style: TextStyle(fontSize: responsiveWidth(context, 20),
+                  color: Color(0xff1A1A1A),
+              fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: responsiveHeight(context, 12),),
+
+            Text('We’ll alert you when something\n cool happens.',
+                textAlign: TextAlign.center, // نص مركزي
+                style: TextStyle(color: Color(0xff808080),
+            fontSize: responsiveWidth(context, 18)))
+          ],
         ),
       );
     }

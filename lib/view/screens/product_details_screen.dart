@@ -220,7 +220,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             quantity: quantity,
                             size: selectedSize,
                           );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content:Text('Added to cart successfully'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Color(0xff1A1A1A), // Optional styling
+
+                            ),
+
+                          );
                         },
+
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff1A1A1A),
                           shape: RoundedRectangleBorder(

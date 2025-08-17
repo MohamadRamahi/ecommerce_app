@@ -31,7 +31,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseNotification().initNotification();
+
   runApp(MyApp());
 }
 final GlobalKey<NavigatorState> navigatorKey =GlobalKey<NavigatorState>();
@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context)=>NotificationCubit()..initNotifications()),
           BlocProvider(create: (_) => OnboardingCubit()),
           BlocProvider(create: (context) => LocationCubit(LocationRepository())),
           BlocProvider(create: (context)=>LoginCubit()),
@@ -56,7 +57,6 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>FavoriteProductsCubit()),
           BlocProvider(create: (context)=>CartCubit()),
           BlocProvider(create: (context)=>SizeCubit()),
-          BlocProvider(create: (context)=>NotificationCubit())
 
         ],
         child:MaterialApp(
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
             '/login': (context) => LoginScreen(),
             '/home': (context) => MainScreen(),
             // '/favorites': (context) => FavoritesScreen(), // ✅ أضف هذا السطر
-            '/notification': (context) => NotificationScreen(),
+           // '/notification': (context) => NotificationScreen(),
 
 
           },
