@@ -1,8 +1,12 @@
 import 'package:ecommerce/cubit/cart_cubit.dart';
 import 'package:ecommerce/cubit/location_cubit.dart';
+import 'package:ecommerce/cubit/payment_state.dart';
+import 'package:ecommerce/cubit/paymnet_cubit.dart';
+import 'package:ecommerce/model/card_payment_model.dart';
 import 'package:ecommerce/model/saved_address.dart';
 import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/screens/address_screen.dart';
+import 'package:ecommerce/view/screens/edit_payment_screen.dart';
 import 'package:ecommerce/view/screens/track_order_screen.dart';
 import 'package:ecommerce/view/widget/location_title_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
@@ -27,6 +31,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   String selectedAddressTitle = "No location selected";
   PaymentMethod selectedMethod = PaymentMethod.card;
+  CardModel? selectedCard;
 
   @override
   void initState() {
@@ -145,7 +150,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                 // Payment method selection
                 Text(
-                  'Payment with',
+                  'Payment Method',
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: responsiveWidth(context, 16),
@@ -190,30 +195,87 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 SizedBox(height: responsiveHeight(context, 16)),
 
                 // Card input (if selected)
-                if (selectedMethod == PaymentMethod.card)
+                if (selectedCard != null)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border(
+                        top: BorderSide(color: Color(0xffE6E6E6)),
+                        bottom: BorderSide(color: Color(0xffE6E6E6)),
+                        right: BorderSide(color: Color(0xffE6E6E6)),
+                        left: BorderSide(color: Color(0xffE6E6E6)),
+                      )
+
+                    ),
+
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/visa2.png',
+                          width: 40,
+                        ),
+                        const SizedBox(width: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("**** **** **** ${selectedCard!.number.substring(selectedCard!.number.length - 4)}"),
+                            Text("Exp: ${selectedCard!.expiryDate}"),
+                          ],
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const EditPaymentScreen(),
+                              ),
+                            );
+                            if (result != null && result is CardModel) {
+                              setState(() {
+                                selectedCard = result;
+                              });
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  )
+                else
                   SizedBox(
-                    height: responsiveHeight(context, 54),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color(0xffE6E6E6),
-                          ),
-                          borderRadius: BorderRadius.circular(10),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        side: BorderSide(
+                          color: Colors.grey.shade300,
                         ),
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: responsiveWidth(context, 12),
-                            vertical: responsiveHeight(context, 12),
-                          ),
-                          child: Image.asset('assets/images/visa2.png'),
-                        ),
-                        hintText: '**** **** **** 1234',
-                        suffixIcon: const Icon(Icons.edit),
+                        elevation: 0,
+                     shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(10),
+                     )
                       ),
+                      onPressed: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EditPaymentScreen(),
+                          ),
+                        );
+                        if (result != null && result is CardModel) {
+                          setState(() {
+                            selectedCard = result;
+                          });
+                        }
+                      },
+                      child: const Text("Add Card",style: TextStyle(
+                        color: Colors.black87
+                      ),),
                     ),
                   ),
-
                 SizedBox(height: responsiveHeight(context, 20)),
                 const Divider(color: Color(0xffE6E6E6)),
                 SizedBox(height: responsiveHeight(context, 20)),

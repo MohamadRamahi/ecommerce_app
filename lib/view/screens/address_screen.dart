@@ -23,7 +23,7 @@ class _AddressScreenState extends State<AddressScreen> {
   List<SavedAddress> savedAddresses = [];
   int? selectedAddressIndex; // -1 = current location, 0+ = saved
   SavedAddress? selectedSavedAddress; // للـ Apply
-  TextEditingController searchController = TextEditingController();
+  //TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
