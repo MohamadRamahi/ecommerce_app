@@ -8,6 +8,7 @@ import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/screens/address_screen.dart';
 import 'package:ecommerce/view/screens/edit_payment_screen.dart';
 import 'package:ecommerce/view/screens/track_order_screen.dart';
+import 'package:ecommerce/view/widget/congrats_dialog_widget.dart';
 import 'package:ecommerce/view/widget/location_title_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // Create an enum for payment methods
 enum PaymentMethod { card, cash, pay }
-
 
 class CheckoutScreen extends StatefulWidget {
   final LatLng? userLocation;
@@ -43,12 +43,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (location != null) {
       try {
         final placemarks = await placemarkFromCoordinates(
-            location.latitude, location.longitude);
+          location.latitude,
+          location.longitude,
+        );
         if (placemarks.isNotEmpty) {
           final placemark = placemarks.first;
           setState(() {
             selectedAddressTitle =
-            "${placemark.street}, ${placemark.locality}, ${placemark.country}";
+                "${placemark.street}, ${placemark.locality}, ${placemark.country}";
           });
         }
       } catch (e) {
@@ -61,7 +63,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cartItems = context.watch<CartCubit>().state;
     final subTotal = cartItems.fold(
-        0.0, (sum, item) => sum + (item.product.price * item.quantity));
+      0.0,
+      (sum, item) => sum + (item.product.price * item.quantity),
+    );
     final shippingFee = 10.0;
     final vat = 0.0;
     final total = subTotal + shippingFee + vat;
@@ -92,7 +96,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         color: Colors.black87,
                       ),
                     ),
-                     NotificationIcon(),
+                    NotificationIcon(),
                   ],
                 ),
                 SizedBox(height: responsiveHeight(context, 16)),
@@ -111,11 +115,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        final savedAddress =
-                        await Navigator.push<SavedAddress>(
+                        final savedAddress = await Navigator.push<SavedAddress>(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => AddressScreen()),
+                            builder: (context) => AddressScreen(),
+                          ),
                         );
 
                         if (savedAddress != null) {
@@ -124,15 +128,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           });
 
                           final newLocation = LatLng(
-                              savedAddress.latitude, savedAddress.longitude);
-                          context.read<LocationCubit>().saveLocation(newLocation);
+                            savedAddress.latitude,
+                            savedAddress.longitude,
+                          );
+                          context.read<LocationCubit>().saveLocation(
+                            newLocation,
+                          );
                         }
                       },
                       child: const Text(
                         'Change',
                         style: TextStyle(color: Colors.black),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(height: responsiveHeight(context, 16)),
@@ -144,17 +152,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ],
                 ),
                 const Divider(color: Color(0xffE6E6E6)),
-                // ... باقي الكود لم يتغير ...
 
+                // ... باقي الكود لم يتغير ...
                 SizedBox(height: responsiveHeight(context, 20)),
 
                 // Payment method selection
                 Text(
                   'Payment Method',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: responsiveWidth(context, 16),
-                      fontWeight: FontWeight.bold),
+                    color: Colors.black,
+                    fontSize: responsiveWidth(context, 16),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: responsiveHeight(context, 16)),
                 Row(
@@ -206,21 +215,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         bottom: BorderSide(color: Color(0xffE6E6E6)),
                         right: BorderSide(color: Color(0xffE6E6E6)),
                         left: BorderSide(color: Color(0xffE6E6E6)),
-                      )
-
+                      ),
                     ),
 
                     child: Row(
                       children: [
-                        Image.asset(
-                          'assets/images/visa2.png',
-                          width: 40,
-                        ),
+                        Image.asset('assets/images/visa2.png', width: 40),
                         const SizedBox(width: 16),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("**** **** **** ${selectedCard!.number.substring(selectedCard!.number.length - 4)}"),
+                            Text(
+                              "**** **** **** ${selectedCard!.number.substring(selectedCard!.number.length - 4)}",
+                            ),
                             Text("Exp: ${selectedCard!.expiryDate}"),
                           ],
                         ),
@@ -240,7 +247,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               });
                             }
                           },
-                        )
+                        ),
                       ],
                     ),
                   )
@@ -250,13 +257,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
-                        side: BorderSide(
-                          color: Colors.grey.shade300,
-                        ),
+                        side: BorderSide(color: Colors.grey.shade300),
                         elevation: 0,
-                     shape: RoundedRectangleBorder(
-                       borderRadius: BorderRadius.circular(10),
-                     )
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                       onPressed: () async {
                         final result = await Navigator.push(
@@ -271,9 +276,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           });
                         }
                       },
-                      child: const Text("Add Card",style: TextStyle(
-                        color: Colors.black87
-                      ),),
+                      child: const Text(
+                        "Add Card",
+                        style: TextStyle(color: Colors.black87),
+                      ),
                     ),
                   ),
                 SizedBox(height: responsiveHeight(context, 20)),
@@ -292,9 +298,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Subtotal",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.grey)),
+                    const Text(
+                      "Subtotal",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
+                      ),
+                    ),
                     Text("\$${subTotal.toStringAsFixed(2)}"),
                   ],
                 ),
@@ -302,9 +312,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Shipping",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.grey)),
+                    const Text(
+                      "Shipping",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
+                      ),
+                    ),
                     Text("\$${shippingFee.toStringAsFixed(2)}"),
                   ],
                 ),
@@ -312,9 +326,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("VAT",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, color: Colors.grey)),
+                    const Text(
+                      "VAT",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
+                      ),
+                    ),
                     Text("\$${vat.toStringAsFixed(2)}"),
                   ],
                 ),
@@ -326,13 +344,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Total",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                            fontSize: responsiveWidth(context, 18))),
-                    Text("\$${total.toStringAsFixed(2)}",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      "Total",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                        fontSize: responsiveWidth(context, 18),
+                      ),
+                    ),
+                    Text(
+                      "\$${total.toStringAsFixed(2)}",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
                 SizedBox(height: responsiveHeight(context, 20)),
@@ -365,7 +388,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         onPressed: () {
                           final code = promoCodeController.text.trim();
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Applied promo code: $code')),
+                            SnackBar(
+                              content: Text('Applied promo code: $code'),
+                            ),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -378,95 +403,53 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             vertical: responsiveHeight(context, 14),
                           ),
                         ),
-                        child: const Text('Add', style: TextStyle(color: Colors.white)),
+                        child: const Text(
+                          'Add',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 ),
+
+                SizedBox(height: responsiveHeight(context, 54)),
 
                 SizedBox(
+                  width: double.infinity,
                   height: responsiveHeight(context, 54),
-                ),
-
-      SizedBox(
-        width: double.infinity,
-        height: responsiveHeight(context, 54),
-        child: ElevatedButton(
-          onPressed: () {
-            showDialog(context: (context),
-                builder: (context)=>AlertDialog(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  title: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.check_circle,
-                          color: Colors.green,
-                          size: 60
-                      ),
-                      SizedBox(height: responsiveHeight(context, 8),),
-
-                      Text(
-                        'Congratulations!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: responsiveHeight(context, 8),),
-                      Text(
-                        'Your order has been placed.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    Center(
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: responsiveHeight(context, 54),
-                        child: ElevatedButton(
-                            onPressed: (){
-                              Navigator.push(context,
-                                MaterialPageRoute(
-                                  builder: (context)=>TrackOrderScreen(),
-                                ),
-
-                              );
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder:
+                            (context) => CongratsDialog(
+                              title: 'Congratulations!',
+                              message: 'Your order has been placed.',
+                              buttonText: 'Track your order',
+                              onButtonPressed: () {
+                                Navigator.pop(context); // يسكر الـ dialog
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TrackOrderScreen(),
+                                  ),
+                                );
+                              },
                             ),
-                            child: Text('Track your order',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),)),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    )
-                  ],
-                )
-            );
-            /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context)=>AddressScreen()));*/
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.black,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10)),
-          ),
-          child: const Text(
-            "Place Order",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      )
-
+                    ),
+                    child: const Text(
+                      "Place Order",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -474,6 +457,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
+
+
 }
 
 // Payment Method Button
@@ -507,21 +492,20 @@ class SelectablePaymentButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          side: BorderSide(
-            color: isSelected ? Colors.black : Colors.grey,
-          ),
+          side: BorderSide(color: isSelected ? Colors.black : Colors.grey),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon,
-                color: isSelected ? Colors.white : Colors.black, size: 16),
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.black,
+              size: 16,
+            ),
             SizedBox(width: responsiveWidth(context, 4)),
             Text(
               text,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-              ),
+              style: TextStyle(color: isSelected ? Colors.white : Colors.black),
             ),
           ],
         ),
@@ -529,3 +513,5 @@ class SelectablePaymentButton extends StatelessWidget {
     );
   }
 }
+
+// Custom Congrats Dialog

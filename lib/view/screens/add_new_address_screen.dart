@@ -1,4 +1,6 @@
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/checkout_screen.dart';
+import 'package:ecommerce/view/widget/congrats_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -208,6 +210,17 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                   child: ElevatedButton(
                     onPressed: selectedLatLng != null && selectedLabel != null && addressText.isNotEmpty
                         ? () {
+                      showDialog(context:(context) ,
+                          builder: (context){
+                        return CongratsDialog(
+                          title: 'Congratulations',
+                            message: 'Your new address has been added.',
+                            buttonText: 'Thanks',
+                            onButtonPressed: (){
+                              Navigator.pop(context); // يسكر الـ dialog
+                            }
+                        );
+                          });
                       Navigator.pop(
                         context,
                         SavedAddress(

@@ -1,6 +1,8 @@
 import 'package:ecommerce/cubit/paymnet_cubit.dart';
 import 'package:ecommerce/model/card_payment_model.dart';
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/checkout_screen.dart';
+import 'package:ecommerce/view/widget/congrats_dialog_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,34 @@ class _NewCardScreenState extends State<NewCardScreen> {
   final TextEditingController expiryController = TextEditingController();
   final TextEditingController securityCode = TextEditingController();
 
+  bool isButtonEnabled = false;
+
   @override
+  void initState() {
+    super.initState();
+    numberController.addListener(_checkForm);
+    expiryController.addListener(_checkForm);
+    securityCode.addListener(_checkForm);
+  }
+  void _checkForm() {
+    setState(() {
+      isButtonEnabled =
+          numberController.text.isNotEmpty &&
+              expiryController.text.isNotEmpty &&
+              securityCode.text.isNotEmpty;
+    });
+  }
+  @override
+
+  void dispose() {
+    numberController.dispose();
+    expiryController.dispose();
+    securityCode.dispose();
+    super.dispose();
+  }
+
+  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -198,6 +227,18 @@ class _NewCardScreenState extends State<NewCardScreen> {
                               securityCode: securityCode.text,
                             );
                             context.read<PaymentCubit>().addCard(card);
+                            showDialog(context: context,
+                                builder: (context){
+                              return CongratsDialog(
+                                  title: 'Congratulations!',
+                                  buttonText: 'Thanks',
+                                  onButtonPressed:(){
+                                    Navigator.pop(context, card); // رجوع مع الكارد
+
+                                  }
+                              );
+                                });
+
                             Navigator.pop(context, card);
                           }
                         },
