@@ -1,7 +1,6 @@
 import 'package:ecommerce/cubit/paymnet_cubit.dart';
 import 'package:ecommerce/model/card_payment_model.dart';
 import 'package:ecommerce/responsive.dart';
-import 'package:ecommerce/view/screens/checkout_screen.dart';
 import 'package:ecommerce/view/widget/congrats_dialog_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -230,6 +229,7 @@ class _NewCardScreenState extends State<NewCardScreen> {
                             showDialog(context: context,
                                 builder: (context){
                               return CongratsDialog(
+                                message: 'Your new card has been added.',
                                   title: 'Congratulations!',
                                   buttonText: 'Thanks',
                                   onButtonPressed:(){

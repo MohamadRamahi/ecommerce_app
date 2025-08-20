@@ -1,4 +1,5 @@
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/help_center_screen.dart';
 import 'package:ecommerce/view/widget/log_out_dialog_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -84,7 +86,11 @@ class ProfileScreen extends StatelessWidget {
                     ProfileMenuItem(
                       icon: Icons.headset_mic_rounded,
                       title: 'Help Center',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=>HelpCenterScreen(),
+                        ));
+                      },
                     ),
                     Divider(thickness: 8, color: Color(0xffE6E6E6)),
                     ProfileMenuItem(

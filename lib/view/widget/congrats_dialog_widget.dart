@@ -8,9 +8,9 @@ class CongratsDialog extends StatelessWidget {
 
   const CongratsDialog({
     super.key,
-    this.title = "Congratulations!",
-    this.message = "Your order has been placed.",
-    this.buttonText = "Track your order",
+    required this.title,
+    required this.message,
+    required this.buttonText,
     required this.onButtonPressed,
   });
 
