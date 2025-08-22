@@ -1,5 +1,6 @@
 import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/screens/help_center_screen.dart';
+import 'package:ecommerce/view/screens/profile_notification_screen.dart';
 import 'package:ecommerce/view/widget/log_out_dialog_widget.dart';
 import 'package:ecommerce/view/widget/notification_icon_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,7 +75,10 @@ class ProfileScreen extends StatelessWidget {
                     ProfileMenuItem(
                       icon: Icons.notifications_none_outlined,
                       title: 'Notifications',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>ProfileNotificationScreen()));
+                      },
                     ),
                     Divider(thickness: 8, color: Color(0xffE6E6E6)),
                     ProfileMenuItem(
