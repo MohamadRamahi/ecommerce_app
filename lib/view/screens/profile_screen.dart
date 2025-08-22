@@ -1,4 +1,5 @@
 import 'package:ecommerce/responsive.dart';
+import 'package:ecommerce/view/screens/details_account_Screen.dart';
 import 'package:ecommerce/view/screens/help_center_screen.dart';
 import 'package:ecommerce/view/screens/profile_notification_screen.dart';
 import 'package:ecommerce/view/widget/log_out_dialog_widget.dart';
@@ -56,7 +57,9 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.person_outline,
                       title: 'My Details',
                       onTap: () {
-                        // Navigate to details screen
+                       Navigator.push(context,
+                       MaterialPageRoute(builder: (context)=>DetailsAccountScreen()
+                       ));
                       },
                     ),
                     Divider(color: Color(0xffE6E6E6)),

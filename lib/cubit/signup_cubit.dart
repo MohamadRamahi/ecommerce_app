@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
@@ -8,6 +9,7 @@ class SignupCubit extends Cubit<SignupState> {
   SignupCubit() : super(SignupInitial());
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> signup({
     required String name,
@@ -36,6 +38,12 @@ class SignupCubit extends Cubit<SignupState> {
       );
 
       await userCredential.user?.updateDisplayName(name);
+
+      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+        'name':name,
+        'email':email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
       emit(SignupSuccess());
     } on FirebaseAuthException catch (e) {

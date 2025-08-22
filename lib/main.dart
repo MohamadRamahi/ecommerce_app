@@ -10,6 +10,7 @@ import 'package:ecommerce/cubit/onbording_cubit.dart';
 import 'package:ecommerce/cubit/otp_cubit.dart';
 import 'package:ecommerce/cubit/paymnet_cubit.dart';
 import 'package:ecommerce/cubit/product_cubit.dart';
+import 'package:ecommerce/cubit/profile_details_cubit.dart';
 import 'package:ecommerce/cubit/reset_password_cubit.dart';
 import 'package:ecommerce/cubit/signup_cubit.dart';
 import 'package:ecommerce/cubit/size_cubit.dart';
@@ -60,7 +61,8 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context)=>CartCubit()),
           BlocProvider(create: (context)=>SizeCubit()),
           BlocProvider(create: (context)=>PaymentCubit()),
-          BlocProvider(create: (context)=>NotificationSettingCubit())
+          BlocProvider(create: (context)=>NotificationSettingCubit()),
+          BlocProvider(create: (context)=>ProfileDetailsCubit()..fetchUserDetails)
 
         ],
         child:MaterialApp(
