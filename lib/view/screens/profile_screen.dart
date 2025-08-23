@@ -1,5 +1,6 @@
 import 'package:ecommerce/responsive.dart';
 import 'package:ecommerce/view/screens/details_account_Screen.dart';
+import 'package:ecommerce/view/screens/faq_screen.dart';
 import 'package:ecommerce/view/screens/help_center_screen.dart';
 import 'package:ecommerce/view/screens/profile_notification_screen.dart';
 import 'package:ecommerce/view/widget/log_out_dialog_widget.dart';
@@ -87,7 +88,11 @@ class ProfileScreen extends StatelessWidget {
                     ProfileMenuItem(
                       icon: Icons.question_mark_outlined,
                       title: 'FAQs',
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context)=>FaqScreen(),
+                        ));
+                      },
                     ),
                     Divider(color: Color(0xffE6E6E6)),
                     ProfileMenuItem(
